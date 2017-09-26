@@ -6,7 +6,9 @@ package twitter;
 import static org.junit.Assert.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
@@ -48,6 +50,29 @@ public class ExtractTest {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet1));
         
         assertTrue("expected empty set", mentionedUsers.isEmpty());
+        
+        Tweet tweetMention = new Tweet(1, "alyssa", " hey @ratbutts ", d1);
+        Tweet tweetMention2 = new Tweet(1, "alyssa", " rats@umd.edu ", d1);
+        Tweet tweetMention3 = new Tweet(1, "ratbert", " what's goin on @rat ? ", d1);
+        
+        List<Tweet> tweets = new ArrayList<Tweet>();
+        tweets.add(tweet1);
+        tweets.add(tweet2);
+        tweets.add(tweetMention);
+        
+        mentionedUsers = Extract.getMentionedUsers(tweets);
+        assertTrue("expected one mention", mentionedUsers.size() == 1);
+        
+        tweets.add(tweetMention2);
+        mentionedUsers = Extract.getMentionedUsers(tweets);
+        assertTrue("expected one mention", mentionedUsers.size() == 1);
+        
+        tweets.add(tweetMention3);
+        mentionedUsers = Extract.getMentionedUsers(tweets);
+        assertTrue("expected two mentions", mentionedUsers.size() == 2);
+        
+        
+        
     }
 
     /*
